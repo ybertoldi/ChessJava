@@ -3,6 +3,8 @@ public abstract class Piece {
 
     private boolean killed = false;
     private boolean white = false;
+    private boolean moved;
+    private String type;
 
     public Piece(boolean white){
         this.white = white;
@@ -20,6 +22,22 @@ public abstract class Piece {
     
     public boolean isWhite(){
         return white;
+    }
+
+    public void setType(String t){
+        this.type = t;
+    }
+
+    public String getType(){
+        return this.type;
+    }
+
+    public void setMoved(boolean b){
+        this.moved = b;
+    }
+
+    public boolean hasMoved(){
+        return moved;
     }
 
     public boolean pathIsClearDiagonally(Board board, Spot start, Spot end){

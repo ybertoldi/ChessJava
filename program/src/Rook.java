@@ -1,13 +1,14 @@
 public class Rook extends Piece{
-    boolean moved = false;
 
     public Rook(boolean white){
         super(white);
+        setType("R");
+        setMoved(false);
     }
 
     @Override
     public boolean canMove(Board board, Spot start, Spot end) {
-        if (end.getPiece().isWhite() == this.isWhite()){
+        if (this.isWhite() && (end.getPiece() != null && end.getPiece().isWhite())){
             return false;
         }
 
@@ -15,7 +16,13 @@ public class Rook extends Piece{
             return false;
         }
 
-        return pathIsClearStraightly(board, start, end);
+        if (pathIsClearStraightly(board, start, end)){
+            setMoved(true);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
 }

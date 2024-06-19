@@ -1,20 +1,31 @@
 public class King extends Piece{
-
-    private  boolean  moved = false;
-
     public King(boolean white){
         super(white);
+        setType("K");
+        setMoved(false);
     }
 
     public boolean  canCastle(Board board, Spot start, Spot end){
-        //OBS: adicionar lógica para ver se não há peças no caminho;
-        
-        return !(moved);
+        if (hasMoved()){
+            return false;
+        }
+
+        else{
+            boolean endCoordsAreValid = (end.getX() == 0 && end.getY() == 0) || (end.getX() == 7 && end.getY() == 0);  
+            boolean endIsRook = (end.getPiece() != null && end.getPiece().getType() == "K");
+
+            if (endIsRook && endCoordsAreValid){
+                return ! end.getPiece().hasMoved();
+            }
+            else {
+                return false;
+            }
+        }  
     }
 
     @Override
     public boolean canMove(Board board, Spot start, Spot end) {
-        if (end.getPiece().isWhite() == this.isWhite()){
+        if (this.isWhite() && (end.getPiece() != null && end.getPiece().isWhite())){
             return false;
         }
 
@@ -23,7 +34,7 @@ public class King extends Piece{
 
         if (deltaX == 0 || deltaX == 1){
             if (deltaY == 0 || deltaY == 1){
-                moved = true;
+                setMoved(true);
                 return true;
             }
         }

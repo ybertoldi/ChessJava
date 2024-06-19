@@ -1,19 +1,22 @@
 public class Bishop extends Piece{
 
+    
     public Bishop(boolean white){
         super(white);
+        setType("B");
     }
 
     @Override
     public boolean canMove(Board board, Spot start, Spot end) {
-        if (start.getPiece().isWhite() == end.getPiece().isWhite()){
+        if (this.isWhite() && (end.getPiece() != null && end.getPiece().isWhite())){
             return false;
         }
 
-        if (Math.abs(start.getX() - end.getX()) != Math.abs(start.getY() - end.getY())){
+        if (start.isDiagonallyAligned(end)){
+            return pathIsClearDiagonally(board, start, end);
+        }
+        else {
             return false;
         }
-
-        return pathIsClearDiagonally(board, start, end);
     }
 }

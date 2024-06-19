@@ -29,6 +29,12 @@ public class Spot {
         this.y = y;
     }
 
-    
+    public boolean isDiagonallyAligned(Spot s){
+        return x - y == s.getX() - s.getY() || x + y == s.getX() + s.getY();
+    }
+
+    public boolean isStraightlyAligned(Spot s){
+        return (x == s.getX() || y == s.getY());
+    } 
     
 }

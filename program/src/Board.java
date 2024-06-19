@@ -24,6 +24,11 @@ public class Board {
         boxes[6][7] = new  Spot(new Knight(false), 6, 7);
         boxes[7][7] = new  Spot(new Rook(false), 7, 7);
 
+        for (int xPos = 0; xPos <=7; xPos++){
+            boxes[xPos][1] = new Spot(new Pawn(true), xPos, 1);
+            boxes[xPos][6] = new Spot(new Pawn(false), xPos, 6);
+        }
+
         for (int xPos = 0; xPos <= 7; xPos++){
             for (int yPos = 2; yPos <= 5; yPos++){
                 boxes[xPos][yPos] = new Spot(null, xPos, yPos);
@@ -34,4 +39,6 @@ public class Board {
     public Spot getBox(int x, int y){
         return boxes[x][y];
     }
+
+
 }

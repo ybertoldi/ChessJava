@@ -2,6 +2,8 @@ public class Knight extends Piece {
 	public Knight(boolean white) 
 	{ 
 		super(white); 
+		setType("Kn");
+		
 	} 
 
 	@Override
@@ -10,7 +12,7 @@ public class Knight extends Piece {
 	{ 
 		// we can't move the piece to a spot that has 
 		// a piece of the same colour 
-		if (end.getPiece().isWhite() == this.isWhite()) { 
+		if (this.isWhite() && (end.getPiece() != null && end.getPiece().isWhite())) { 
 			return false; 
 		} 
 

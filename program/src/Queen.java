@@ -2,21 +2,19 @@ public class Queen extends Piece{
     
     public Queen (boolean white){
         super(white);
+        setType("Q");
     }
 
     @Override
     public boolean canMove(Board board, Spot start, Spot end) {
-        if (start.getPiece().isWhite() == end.getPiece().isWhite()){
+        if (this.isWhite() && (end.getPiece() != null && end.getPiece().isWhite())){
             return false;
         }
 
-        boolean movingDiagonally = Math.abs(start.getX() - end.getX()) == Math.abs(start.getY() - end.getY());
-        boolean movingStraightly = start.getX() - end.getX() == 0 && start.getY() - end.getY() == 0;
-
-        if (movingDiagonally){
+        if (start.isDiagonallyAligned(end)){
             return pathIsClearDiagonally(board, start, end);
         }
-        if (movingStraightly){
+        if (start.isStraightlyAligned(end)){
             return pathIsClearStraightly(board, start, end);
         }
         else {
