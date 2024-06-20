@@ -140,6 +140,42 @@ public abstract class Piece {
         return true;
     };
 
+
+
+    public boolean isExposingTheKing(Board board, Spot start, Spot end){
+        Spot kingSpot = board.getTrackedPiece("K", this.isWhite());
+        
+        if (start.isDiagonallyAligned(kingSpot)){
+            String canMoveDiagonally[] = {"B1", "B2", "Q"};
+            for (int i = 0; i <= 2; i++){
+                Spot currentThreat = board.getTrackedPiece(canMoveDiagonally[i], !this.isWhite());
+
+                boolean currentThreatIsAlignedToKingAndPiece = currentThreat.isDiagonallyAligned(kingSpot) && currentThreat.isDiagonallyAligned(start);
+                boolean currentThreatIsNotBlocked = currentThreat.getPiece().pathIsClearDiagonally(board,currentThreat, start);
+                
+                if (currentThreatIsAlignedToKingAndPiece && currentThreatIsNotBlocked){
+                    return true;
+                }
+            }
+        }
+
+        else if (start.isStraightlyAligned(kingSpot)){
+            String canMoveStraightly[] = {"R1", "R2", "Q"};
+            for (int i = 0; i <= 2; i++){
+                Spot currentThreat = board.getTrackedPiece(canMoveStraightly[i], !this.isWhite());
+
+                boolean currentThreatIsAlignedToKingAndPiece = currentThreat.isStraightlyAligned(kingSpot) && currentThreat.isDiagonallyAligned(start);
+                boolean currentThreatIsNotBlocked = currentThreat.getPiece().pathIsClearStraightly(board,currentThreat, start);
+                
+                if (currentThreatIsAlignedToKingAndPiece && currentThreatIsNotBlocked){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public abstract boolean canMove(Board board, Spot start, Spot end);
 
 }

@@ -1,5 +1,9 @@
+import java.util.HashMap;
+
 public class Board {
-    Spot[][] boxes;
+    Spot[][] boxes = new Spot[8][8];
+    HashMap<String, Spot> wPieces = new HashMap<>();
+    HashMap<String, Spot> bPieces = new HashMap<>();
 
     public Board(){
         this.resetBoard();
@@ -34,11 +38,79 @@ public class Board {
                 boxes[xPos][yPos] = new Spot(null, xPos, yPos);
             }
         }
+
+        startPiecesTracking();
     }
 
     public Spot getBox(int x, int y){
         return boxes[x][y];
     }
 
+    public void startPiecesTracking(){
+        String[] names = {"R1", "R2", "N1", "N2", "B1", "B2", "Q", "K"}; 
+
+        for(int i = 0; i <= 7; i++){
+            for (int j = 0; j <= 7; j++){
+
+                Spot currentSpot = getBox(j, i);
+
+                if (currentSpot.getPiece() != null){
+                    String type = currentSpot.getPiece().getType();
+                    boolean w = currentSpot.getPiece().isWhite();
+
+                    for (int k = 0; k <= 7; k++){
+                        if (type.equals(names[k])){
+                            
+                            if(w){
+                                wPieces.put(type, currentSpot);
+                            }
+                            else{
+                                bPieces.put(type, currentSpot);
+                            }
+                        }
+
+                }
+                
+            }
+        }
+    }
+}
+
+    public void updateTrackedPieces(Piece piece, Spot newSpot){
+        String type = piece.getType();
+        boolean w = piece.isWhite();
+
+        if (w){
+            wPieces.replace(type, newSpot);
+        }
+        else{
+            bPieces.replace(type, newSpot);
+        }
+    }
+
+    public Spot getTrackedPiece(String type, boolean white){
+        if (white){
+            return wPieces.get(type);
+        }
+        else{
+            return bPieces.get(type);
+        }
+    }
+
+    public void movePiece(Spot start, Spot end){
+        int sX = start.getX();
+        int sY = start.getY();
+
+        int eX = end.getX();
+        int eY = end.getY();
+
+        Piece piece = start.getPiece();
+        if (piece.canMove(this, start, end)){
+            boxes[sX][sY].setPiece(null);
+            
+            piece.setMoved(true);
+            boxes[eX][eY].setPiece(piece);
+        }
+    }
 
 }
