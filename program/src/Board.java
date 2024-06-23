@@ -105,6 +105,7 @@ public class Board {
         Piece piece = start.getPiece();
         
         boxes[sX][sY].setPiece(null); 
+        
         piece.setMoved(true);
         boxes[eX][eY].setPiece(piece);
         
@@ -113,12 +114,12 @@ public class Board {
         
         if (w){
             if (wPieces.containsKey(pieceType)){
-                updateTrackedPieces(piece, end);
+                updateTrackedPieces(piece, boxes[eX][eY]);
             }
         }
         else{
             if (bPieces.containsKey(pieceType)){
-                updateTrackedPieces(piece, end);
+                updateTrackedPieces(piece, boxes[eX][eY]);
             }
         }
     }
@@ -130,13 +131,18 @@ public class Board {
             return false;
         }
 
-        if (start.getX() < 0 || start.getX() < 0){
+        else if (start.getX() < 0 || start.getX() < 0 || start.getX() > 7 || start.getX() > 7){
             return false;
         }
 
-        if (piece.canMove(this, start, end)){
+        else if (end.getX() < 0 || end.getX() < 0 || end.getX() > 7 || end.getX() > 7){
+            return false;
+        }
+
+        else if (piece.canMove(this, start, end)){
             return true;
         }
+        
         else{
             return false;
         }

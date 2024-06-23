@@ -8,7 +8,6 @@ public class Rook extends Piece{
 			numberInBoard = 1;
 		}
         setType("R" + numberInBoard);
-        setMoved(false);
     }
 
     @Override

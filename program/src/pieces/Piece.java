@@ -8,6 +8,7 @@ public abstract class Piece {
 
     public Piece(boolean white){
         this.white = white;
+        this.setMoved(false);
     }
 
     

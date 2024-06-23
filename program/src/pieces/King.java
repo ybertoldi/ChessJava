@@ -5,7 +5,6 @@ public class King extends Piece{
     public King(boolean white){
         super(white);
         setType("K");
-        setMoved(false);
         setInCheck(false);
 
     }

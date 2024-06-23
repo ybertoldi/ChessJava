@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 public class Game {
     static ChessParser parser = new ChessParser(); //
@@ -40,18 +41,13 @@ public class Game {
         if (parser.canParse(txt)){
 
             if (parser.moveIsAmbiguous(txt, board, white)){
-                moveIsIlegall = false;
                 inputIsAmbiguous = true;                
             }
             else{
-                inputIsAmbiguous = false;
-
                 Spot start = parser.getStart(txt, board, white);
                 Spot end = parser.getEnd(txt, board, white);
 
-                if (board.canMove(start, end)){
-                    inputIsInvalid = false;
-                    moveIsIlegall = false;
+                if (board.canMove(start, end) && start.getPiece().isWhite() == white){
                     board.movePiece(start, end);
                 }
                 else{
@@ -62,9 +58,7 @@ public class Game {
         }
         
         else{
-            System.out.print("    Move description is not according to chess notation. Please write again: ");
-            inputIsAmbiguous = false;
-            inputIsInvalid = false;
+            System.out.println("    Move description is not according to chess notation.");
         }
 
         if (inputIsInvalid && inputIsAmbiguous){
@@ -75,12 +69,10 @@ public class Game {
             }
             System.out.println(".");
 
-            System.out.print("    next movement: ");
         }
 
         if (inputIsInvalid && moveIsIlegall) {
             System.out.println("    Movement is ilegal.");
-            System.out.print("    next movement: ");
         }
         
                                 
@@ -89,13 +81,25 @@ public class Game {
     public static void main(String[] args) {
         Board b = new Board();
         draw(b);
+        Scanner scanner = new Scanner(System.in);
+        String input;
+        int k = 2;
+
+        while (true){
+            System.out.print("Write next movement: ");
+            input = scanner.nextLine();
+            if (k % 2 == 0) {
+                movePiece(b, true, input);
+                k++;
+            }
+            else{
+                movePiece(b, false, input);
+                k++;
+            }
+            draw(b);
+            
+        }
         
-        movePiece(b, true, "Nc3");
 
-        draw(b);
-
-        movePiece(b, true, "Nc3");
-
-        draw(b);
     }
 }

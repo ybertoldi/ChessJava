@@ -3,7 +3,6 @@ public class Pawn extends Piece{
     public Pawn(boolean white){
         super(white);
         setType("p");
-        setMoved(false);
     }
 
     @Override
@@ -12,28 +11,46 @@ public class Pawn extends Piece{
             return false;
         }
 
-        if (end.getY() - start.getY() != 1){
-            return false;
-        }
+        int deltaY = end.getY() - start.getY();
+        int deltaX = end.getX() - start.getX();
 
-        if( isExposingTheKing(board, start, end)){
-            return false;
-        }
-
-        if (end.getX() != start.getX()){
-            if (Math.abs(start.getX() - end.getX()) != 1){
-                return false;
+        if (this.isWhite()){
+            if (deltaY == 1){
+                if (deltaX == 0){
+                    return true;
+                }
+                if (Math.abs(deltaX) == 1){
+                    if(end.getPiece() != null && end.getPiece().isKilled() != this.isWhite()){
+                        return true;
+                    }
+                }
             }
-
-            if (end.getPiece() != null && end.getPiece().isWhite() != this.isWhite()){
+            else if (deltaY == 2 && !this.hasMoved()){
                 return true;
             }
-            else {
-                return false;
+            
+            return false;         
+            
+        }
+        else{
+            if (deltaY == -1){
+                if (deltaX == 0){
+                    return true;
+                }
+                if (Math.abs(deltaX) == 1){
+                    if(end.getPiece() != null && end.getPiece().isKilled() != this.isWhite()){
+                        return true;
+                    }
+                }
             }
+            else if (deltaY == -2 && !this.hasMoved()){
+                return true;
+            }
+            
+            return false;
         }
 
-        return true;
+
     }
 
 }
