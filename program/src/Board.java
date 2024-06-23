@@ -100,17 +100,45 @@ public class Board {
     public void movePiece(Spot start, Spot end){
         int sX = start.getX();
         int sY = start.getY();
-
         int eX = end.getX();
         int eY = end.getY();
-
         Piece piece = start.getPiece();
-        if (piece.canMove(this, start, end)){
-            boxes[sX][sY].setPiece(null);
-            
-            piece.setMoved(true);
-            boxes[eX][eY].setPiece(piece);
+        
+        boxes[sX][sY].setPiece(null); 
+        piece.setMoved(true);
+        boxes[eX][eY].setPiece(piece);
+        
+        String pieceType = piece.getType(); 
+        boolean w = piece.isWhite();
+        
+        if (w){
+            if (wPieces.containsKey(pieceType)){
+                updateTrackedPieces(piece, end);
+            }
+        }
+        else{
+            if (bPieces.containsKey(pieceType)){
+                updateTrackedPieces(piece, end);
+            }
         }
     }
 
+    public boolean canMove(Spot start, Spot end){
+        Piece piece = start.getPiece();
+
+        if (piece == null){
+            return false;
+        }
+
+        if (start.getX() < 0 || start.getX() < 0){
+            return false;
+        }
+
+        if (piece.canMove(this, start, end)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
