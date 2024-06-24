@@ -131,11 +131,11 @@ public class Board {
             return false;
         }
 
-        else if (start.getX() < 0 || start.getX() < 0 || start.getX() > 7 || start.getX() > 7){
+        else if (start.getX() < 0 || start.getX() < 0 || start.getY() > 7 || start.getY() > 7){
             return false;
         }
 
-        else if (end.getX() < 0 || end.getX() < 0 || end.getX() > 7 || end.getX() > 7){
+        else if (end.getX() < 0 || end.getX() < 0 || end.getY() > 7 || end.getY() > 7){
             return false;
         }
 

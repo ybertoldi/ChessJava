@@ -7,8 +7,10 @@ public class Queen extends Piece{
 
     @Override
     public boolean canMove(Board board, Spot start, Spot end) {
-        if (this.isWhite() == (end.getPiece() != null && end.getPiece().isWhite())){
-            return false;
+        if( end.getPiece() != null){
+            if(this.isWhite() == end.getPiece().isWhite()){
+                return false;
+            }
         }
 
         if(isExposingTheKing(board, start, end)){

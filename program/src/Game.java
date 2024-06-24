@@ -85,7 +85,7 @@ public class Game {
         String input;
         int k = 2;
 
-        while (true){
+        while (k < 100){
             System.out.print("Write next movement: ");
             input = scanner.nextLine();
             if (k % 2 == 0) {
@@ -99,7 +99,7 @@ public class Game {
             draw(b);
             
         }
-        
+        scanner.close();
 
     }
 }

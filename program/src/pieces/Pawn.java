@@ -7,9 +7,13 @@ public class Pawn extends Piece{
 
     @Override
     public boolean canMove(Board board, Spot start, Spot end) {
-        if(this.isWhite() == (end.getPiece() != null && end.getPiece().isWhite())){
-            return false;
+        
+        if( end.getPiece() != null){
+            if(this.isWhite() == end.getPiece().isWhite()){
+                return false;
+            }
         }
+        
 
         int deltaY = end.getY() - start.getY();
         int deltaX = end.getX() - start.getX();
@@ -20,7 +24,7 @@ public class Pawn extends Piece{
                     return true;
                 }
                 if (Math.abs(deltaX) == 1){
-                    if(end.getPiece() != null && end.getPiece().isKilled() != this.isWhite()){
+                    if(end.getPiece() != null && end.getPiece().isWhite() != this.isWhite()){
                         return true;
                     }
                 }
@@ -32,13 +36,14 @@ public class Pawn extends Piece{
             return false;         
             
         }
-        else{
+
+        if (!this.isWhite()){
             if (deltaY == -1){
                 if (deltaX == 0){
                     return true;
                 }
                 if (Math.abs(deltaX) == 1){
-                    if(end.getPiece() != null && end.getPiece().isKilled() != this.isWhite()){
+                    if(end.getPiece() != null && end.getPiece().isWhite() != this.isWhite()){
                         return true;
                     }
                 }
@@ -50,6 +55,7 @@ public class Pawn extends Piece{
             return false;
         }
 
+        return false;
 
     }
 
