@@ -92,44 +92,36 @@ public class ChessParser {
             return false;
         }
         
-        if (txt.length() == 3){
-            String coords[] = txt.substring(1).split("");
-
-            int x = cols.get(coords[0]);
-            int y = rows.get(coords[1]);
-            
-            Spot end = board.getBox(x,y);
-            Spot s1 = board.getTrackedPiece(piece + "1", white);
-            Spot s2 = board.getTrackedPiece(piece + "2", white);
-
-            if (board.canMove(s1, end) && board.canMove(s2, end)){
-                return true;
+        switch (txt.length()) {
+            case 3: {
+                String coords[] = txt.substring(1).split("");
+                
+                int x = cols.get(coords[0]);
+                int y = rows.get(coords[1]);
+                
+                Spot end = board.getBox(x,y);
+                Spot s1 = board.getTrackedPiece(piece + "1", white);
+                Spot s2 = board.getTrackedPiece(piece + "2", white);
+                
+            return board.canMove(s1, end) && board.canMove(s2, end);
+                
             }
-            else{
+            case 4: {
+                String coords[] = txt.substring(2).split("");
+                
+                int x = cols.get(coords[0]);
+                int y = rows.get(coords[1]);
+                
+                Spot end = board.getBox(x,y);
+                Spot s1 = board.getTrackedPiece(piece + "1", white);
+                Spot s2 = board.getTrackedPiece(piece + "2", white);
+                
+            return board.canMove(s1, end) && board.canMove(s2, end);
+                
+            }
+            default: {
                 return false;
             }
-
-        }
-        else if (txt.length() == 4){
-            String coords[] = txt.substring(2).split("");
-
-            int x = cols.get(coords[0]);
-            int y = rows.get(coords[1]);
-            
-            Spot end = board.getBox(x,y);
-            Spot s1 = board.getTrackedPiece(piece + "1", white);
-            Spot s2 = board.getTrackedPiece(piece + "2", white);
-            
-            if (board.canMove(s1, end) && board.canMove(s2, end)){
-                return true;
-            }
-            else{
-                return false;
-            }
-
-        }
-        else {
-            return false;
         }
     }
 
@@ -161,21 +153,23 @@ public class ChessParser {
             }
         }
         else if (txt.length() == 3 || txt.length() == 4){
-            // Nc3 // Bxh7
+            // Nc3 // Bxh7 // Kc3
             String type = txt.split("")[0];
-            int coords[] = getCoords(txt.substring(1));
             
-            Spot end = board.getBox(coords[0], coords[1]);
-            Spot possibleStart1 = board.getTrackedPiece(type + "1", white);
-            Spot possibleStart2 = board.getTrackedPiece(type + "2", white);
+            if (type.equals("K")) {
+                return board.getTrackedPiece("K", white);
+            }
 
-            if (board.canMove(possibleStart1, end)){
-                return possibleStart1;
-            }
-            else{
-                return possibleStart2;
+            Spot possibleStarts[] = generatePossibleStarts(type, board, white);
+            Spot end = getEnd(txt, board, white);
+
+            for (Spot possibleStart : possibleStarts) {
+                if (board.canMove(possibleStart, end)) {
+                    return possibleStart;
+                }
             }
             
+            return new Spot(null, -1, -1);   
         }
         
         else if (txt.length() == 5 || txt.length() == 6){
@@ -190,46 +184,62 @@ public class ChessParser {
     }
 
     public int[] getCoords(String txt){
-        return new int[] {cols.get(txt.split("")[0]), rows.get(txt.split("")[1])};
+        int coords[] = new int[2];
+        coords[0] = cols.get(txt.split("")[0]);
+        coords[1] = rows.get(txt.split("")[1]);
+        return coords;
     }
 
     public Spot getEnd(String txt, Board board, boolean white){
-        if (txt.equals("O-O") || txt.equals("O-O-O")){
-            if (white){
-                if (txt.equals("O-O")){
+        if (txt.equals("O-O") || txt.equals("O-O-O"))
+        {
+            if (white)
+            {
+                if (txt.equals("O-O"))
+                {
                     return board.getBox(7, 0);
                 }
-                else{
+                else
+                {
                     return board.getBox(0, 0);
                 }
             }
-            else{
-                if (txt.equals("O-O")){
+            else
+            {
+                if (txt.equals("O-O"))
+                {
                     return board.getBox(7, 7);
                 }
-                else{
+                else
+                {
                     return board.getBox(0, 7);
                 }
             }
         }
-        else if (txt.length() == 2){
-            // e4
-            int coords[] = getCoords(txt);
-            return board.getBox(coords[0], coords[1]);
-        }
-        else if (txt.length() == 3 || txt.length() == 4){
-            // Nc3, Bxh7
-            int coords[] = getCoords(txt.substring(1));
-            return board.getBox(coords[0], coords[1]);
-        }
         
-        else if (txt.length() == 5 || txt.length() == 6){
-            // Qh4e1, Qh4xe1
-            int coords[] = getCoords(txt.substring(4));
-            return board.getBox(coords[0], coords[1]);      
-        }
-        else {
-            return new Spot(null, 0, 0);
+        switch (txt.length()) {
+            case 2:
+            {
+                // e4
+                int coords[] = getCoords(txt);
+                return board.getBox(coords[0], coords[1]);
+            }
+            case 3:
+            case 4:
+            {
+                // Nc3, Bxh7
+                int coords[] = getCoords(txt.substring(1));
+                return board.getBox(coords[0], coords[1]);
+            }
+            case 5:
+            case 6:
+            {
+                // Qh4e1, Qh4xe1
+                int coords[] = getCoords(txt.substring(4));
+                return board.getBox(coords[0], coords[1]);
+            }
+            default:
+                return new Spot(null, 0, 0);
         }
     }
 
@@ -258,5 +268,23 @@ public class ChessParser {
         
         String s3 = s1 + s2;
         return s3;
+    }
+
+
+    public Spot[] generatePossibleStarts(String type, Board board, boolean white){
+        Spot roughSpots[] = new Spot[5];
+        int counter = 0;
+        
+        for (int i = 1; i <= 5; i++){
+            if (board.hasTrackedPiece(type + i, white)){
+                roughSpots[counter] = board.getTrackedPiece(type + i, white);
+                counter++;
+            }
+        }
+
+        Spot returnArr[] = new Spot[counter];
+        System.arraycopy(roughSpots, 0, returnArr, 0, counter);
+
+        return returnArr;
     }
 }

@@ -1,13 +1,21 @@
 public class Bishop extends Piece{
-    static int numberInBoard = 0;
+    static int wInBoard = 0;
+    static int bInBoard = 0;
     
     public Bishop(boolean white){
         super(white);
-        numberInBoard++;
-        if(numberInBoard == 3){
-			numberInBoard = 1;
-		}
-        setType("B" + numberInBoard);
+
+        int n;        
+        if(white){
+            wInBoard++;
+            n = wInBoard;
+        }
+        else{
+            bInBoard++;
+            n = bInBoard;
+        }
+        
+        setType("B" + n);
     }
 
     @Override

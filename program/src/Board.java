@@ -97,6 +97,15 @@ public class Board {
         }
     }
 
+    public boolean hasTrackedPiece(String type, boolean white){
+        if (white){
+            return wPieces.containsKey(type);
+        }
+        else{
+            return bPieces.containsKey(type);
+        }
+    }
+
     public void movePiece(Spot start, Spot end){
         int sX = start.getX();
         int sY = start.getY();

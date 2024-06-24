@@ -1,8 +1,19 @@
 public class Queen extends Piece{
-    
+    static int wInBoard = 0;
+    static int bInBoard = 0;
+
     public Queen (boolean white){
         super(white);
-        setType("Q");
+        int n;        
+        if(white){
+            wInBoard++;
+            n = wInBoard;
+        }
+        else{
+            bInBoard++;
+            n = bInBoard;
+        }
+        setType("B" + n);
     }
 
     @Override

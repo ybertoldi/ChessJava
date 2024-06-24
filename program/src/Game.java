@@ -1,14 +1,62 @@
-import java.util.Scanner;
 
 public class Game {
-    static ChessParser parser = new ChessParser(); //
+    ChessParser parser; 
+    Board board;
 
-    public static void draw(Board b){  
+    boolean  whiteToMove;
+    boolean  gameHasEnded;
+
+    public Game(){
+        board = new Board();
+        parser = new ChessParser();
+        whiteToMove = true;
+        gameHasEnded = false;
+    }
+
+    public void reset(){
+        board.resetBoard();
+        whiteToMove = true;
+    }
+
+    public boolean hasEnded(){
+        return gameHasEnded;
+    }
+
+    public Piece getPieceAt(String txt){
+        if (txt.length() == 2){
+            int coords[] = parser.getCoords(txt);
+            return board.getBox(coords[0], coords[1]).getPiece();
+        }
+        else{
+            return null;
+        }
+    }
+
+    public Piece getPieceAt(int x, int y){
+        return board.getBox(x, y).getPiece();
+    }
+
+    public Spot getSpot(String txt){
+        if (txt.length() == 2){
+            int coords[] = parser.getCoords(txt);
+            return board.getBox(coords[0], coords[1]);
+        }
+        else{
+            return null;
+        }
+    }
+
+    public Spot getSpot(int x, int y){
+        return board.getBox(x, y);
+    }
+
+    
+    public void draw(){  
         String indexes[] = {"a", "b", "c", "d", "e", "f", "g", "h"};
         for (int i = 7; i >= 0 ; i--){
             System.out.print(i + 1 + " | ");
             for(int j = 0; j <= 7; j++){
-                Spot s = b.getBox(j, i);
+                Spot s = board.getBox(j, i);
                 if (s.getPiece() == null){
                     System.out.print(" x ");
                 }
@@ -33,22 +81,33 @@ public class Game {
         System.out.println("");
     }
 
-    static void movePiece(Board board, boolean white, String txt){
+    public void movePiece(int sX, int sY, int eX, int eY){
+        Spot start = board.getBox(sX, sY);
+        Spot end = board.getBox(eX, eY);
+
+        if (board.canMove(start, end)){
+            board.movePiece(start, end);
+            whiteToMove = !whiteToMove;
+        }
+    }
+
+    public void movePiece(String txt){
         boolean inputIsInvalid = true;
         boolean inputIsAmbiguous = false;
         boolean moveIsIlegall = false;        
 
         if (parser.canParse(txt)){
 
-            if (parser.moveIsAmbiguous(txt, board, white)){
+            if (parser.moveIsAmbiguous(txt, board, whiteToMove)){
                 inputIsAmbiguous = true;                
             }
             else{
-                Spot start = parser.getStart(txt, board, white);
-                Spot end = parser.getEnd(txt, board, white);
+                Spot start = parser.getStart(txt, board, whiteToMove);
+                Spot end = parser.getEnd(txt, board, whiteToMove);
 
-                if (board.canMove(start, end) && start.getPiece().isWhite() == white){
+                if (board.canMove(start, end) && start.getPiece().isWhite() == whiteToMove){
                     board.movePiece(start, end);
+                    whiteToMove = !whiteToMove;
                 }
                 else{
                     moveIsIlegall = true;
@@ -62,7 +121,7 @@ public class Game {
         }
 
         if (inputIsInvalid && inputIsAmbiguous){
-            String moves[] = parser.correctMoves(txt, board, white);
+            String moves[] = parser.correctMoves(txt, board, whiteToMove);
             System.out.print("    Notation is ambiguous, you should enter one of the following moves:");
             for (int i = 0; i < moves.length; i++){
                 System.out.print(" " + moves[i]);
@@ -73,33 +132,7 @@ public class Game {
 
         if (inputIsInvalid && moveIsIlegall) {
             System.out.println("    Movement is ilegal.");
-        }
-        
-                                
+        }                                
     }
-
-    public static void main(String[] args) {
-        Board b = new Board();
-        draw(b);
-        Scanner scanner = new Scanner(System.in);
-        String input;
-        int k = 2;
-
-        while (k < 100){
-            System.out.print("Write next movement: ");
-            input = scanner.nextLine();
-            if (k % 2 == 0) {
-                movePiece(b, true, input);
-                k++;
-            }
-            else{
-                movePiece(b, false, input);
-                k++;
-            }
-            draw(b);
-            
-        }
-        scanner.close();
-
-    }
+    
 }
