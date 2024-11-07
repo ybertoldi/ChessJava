@@ -15,7 +15,7 @@ public class Knight extends Piece {
             bInBoard++;
             n = bInBoard;
         }
-        setType("B" + n);
+        setType("N" + n);
 	} 
 
 	@Override
@@ -29,17 +29,16 @@ public class Knight extends Piece {
                 return false;
             }
         }
+		
+		if (! moveIsLegal(board, start, end)) {
+        	return false;
+        }
 
 		int x = Math.abs(start.getX() - end.getX()); 
 		int y = Math.abs(start.getY() - end.getY()); 
 		
 		if (x * y == 2){
-			if (isExposingTheKing(board, start, end)){
-				return false;
-			}
-			else{
 				return true;
-			}
 		}
 		
 		return false;

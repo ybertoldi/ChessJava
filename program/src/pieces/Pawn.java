@@ -1,8 +1,21 @@
 public class Pawn extends Piece{
 
+	static int wInBoard = 0;
+	static int bInBoard = 0;
+	
     public Pawn(boolean white){
         super(white);
-        setType("p");
+        
+        if (white) {
+        	wInBoard++;
+        	setType("p" + wInBoard);
+        }
+        else {
+        	bInBoard++;
+        	setType("p" + wInBoard);
+        }
+        
+        
     }
 
     @Override
@@ -14,6 +27,9 @@ public class Pawn extends Piece{
             }
         }
         
+        if (! moveIsLegal(board, start, end)) {
+        	return false;
+        }
 
         int deltaY = end.getY() - start.getY();
         int deltaX = end.getX() - start.getX();
